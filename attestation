@@ -1,0 +1,117 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+class Laptop {
+    private String model;
+    private int ram; // в гигабайтах
+    private int hdd; // в гигабайтах
+    private String os;
+    private String color;
+    private double price;
+
+    public Laptop(String model, int ram, int hdd, String os, String color, double price) {
+        this.model = model;
+        this.ram = ram;
+        this.hdd = hdd;
+        this.os = os;
+        this.color = color;
+        this.price = price;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public int getRam() {
+        return ram;
+    }
+
+    public int getHdd() {
+        return hdd;
+    }
+
+    public String getOs() {
+        return os;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    @Override
+    public String toString() {
+        return "Модель: " + model + ", ОЗУ: " + ram + " ГБ, ЖД: " + hdd + " ГБ, ОС: " + os + ", Цвет: " + color + ", Цена: " + price;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        List<Laptop> laptops = new ArrayList<>();
+        laptops.add(new Laptop("Asus ZenBook", 8, 512, "Windows 10", "Silver", 800));
+        laptops.add(new Laptop("MacBook Pro", 16, 1024, "macOS", "Space Gray", 1500));
+        laptops.add(new Laptop("Dell XPS", 12, 256, "Ubuntu", "Black", 1000));
+        laptops.add(new Laptop("HP Pavilion", 4, 128, "Windows 10", "Blue", 500));
+
+        Map<Integer, String> criteriaMap = new HashMap<>();
+        criteriaMap.put(1, "ОЗУ");
+        criteriaMap.put(2, "Объем ЖД");
+        criteriaMap.put(3, "Операционная система");
+        criteriaMap.put(4, "Цвет");
+
+        System.out.println("Доступные критерии фильтрации:");
+        for (Map.Entry<Integer, String> entry : criteriaMap.entrySet()) {
+            System.out.println(entry.getKey() + " - " + entry.getValue());
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Введите цифру, соответствующую необходимому критерию: ");
+        int filterCriterion = scanner.nextInt();
+
+        Map<String, Integer> filterMap = new HashMap<>();
+        System.out.print("Введите минимальное значение для " + criteriaMap.get(filterCriterion) + ": ");
+        int minValue = scanner.nextInt();
+        filterMap.put(criteriaMap.get(filterCriterion), minValue);
+
+        List<Laptop> filteredLaptops = filterLaptops(laptops, filterCriterion, minValue);
+        System.out.println("Ноутбуки, отвечающие фильтру:");
+        for (Laptop laptop : filteredLaptops) {
+            System.out.println(laptop);
+        }
+    }
+
+    public static List<Laptop> filterLaptops(List<Laptop> laptops, int filterCriterion, int minValue) {
+        List<Laptop> filteredLaptops = new ArrayList<>();
+        for (Laptop laptop : laptops) {
+            switch (filterCriterion) {
+                case 1:
+                    if (laptop.getRam() >= minValue) {
+                        filteredLaptops.add(laptop);
+                    }
+                    break;
+                case 2:
+                    if (laptop.getHdd() >= minValue) {
+                        filteredLaptops.add(laptop);
+                    }
+                    break;
+                case 3:
+                    if (laptop.getOs().length() >= minValue) {
+                        filteredLaptops.add(laptop);
+                    }
+                    break;
+                case 4:
+                    if (laptop.getColor().length() >= minValue) {
+                        filteredLaptops.add(laptop);
+                    }
+                    break;
+            }
+        }
+        return filteredLaptops;
+    }
+}
